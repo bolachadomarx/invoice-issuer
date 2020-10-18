@@ -1,1 +1,88 @@
-<p>issuer works!</p>
+<div class="w-100" fxLayoutGap="10px" style="padding: 10px;" fxLayout="row">
+  <mat-card fxFlex="50">
+    <mat-card-header>
+      <mat-card-title>Adicionar nova nota fiscal</mat-card-title>
+      <mat-card-subtitle>Para adicionar a nota fiscal você deve incluir ao menos um produto</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div [formGroup]="invoiceForm" fxLayout="row">
+        <div fxFlex="100">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Nome do Cliente</mat-label>
+            <input formControlName="client" matInput placeholder="label">
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div [formGroup]="productInvoiceform" class="w-100" fxLayoutAlign="start center" fxLayoutGap="10px"
+        fxLayout="row">
+        <div fxflex="100">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Produtos disponíveis</mat-label>
+            <mat-select formControlName="product">
+              <mat-option *ngFor="let product of products" [value]="product">
+                {{product.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Quantidade</mat-label>
+            <input formControlName="quantity" matInput placeholder="label">
+          </mat-form-field>
+          <button [disabled]="productInvoiceform.invalid" (click)="addProduct()" color="primary"
+            mat-raised-button>Adicionar item</button>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100">
+          <table style="text-align: center;" class="w-100" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef> code </th>
+              <td mat-cell *matCellDef="let invoiceProduct"> {{ invoiceProduct.product.code}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef> description </th>
+              <td mat-cell *matCellDef="let invoiceProduct"> {{ invoiceProduct.product.description}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="value">
+              <th mat-header-cell *matHeaderCellDef> value </th>
+              <td mat-cell *matCellDef="let invoiceProduct"> {{ invoiceProduct.product.value}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="discount">
+              <th mat-header-cell *matHeaderCellDef> discount </th>
+              <td mat-cell *matCellDef="let invoiceProduct"> {{ invoiceProduct.product.discount}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef> quantity </th>
+              <td mat-cell *matCellDef="let invoiceProduct"> {{ invoiceProduct.quantity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+              <th mat-header-cell *matHeaderCellDef> delete </th>
+              <td mat-cell *matCellDef="let invoiceProduct; let i = index"> <button (click)="deleteProduct(i)"
+                  mat-mini-fab>
+                  <mat-icon>delete</mat-icon>
+                </button> </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;" fxLayout="row">
+        <div fxFlex="100">
+          <h1>Preço total: {{ total | currency: 'BRL' }}</h1>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button [disabled]="invoiceForm.invalid || invoiceProducts.length === 0" (click)="addInvoice()" color="primary"
+        mat-flat-button>Adicionar</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
