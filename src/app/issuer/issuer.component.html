@@ -9,7 +9,7 @@
         <div fxFlex="100">
           <mat-form-field class="w-100" appearance="outline">
             <mat-label>Nome do Cliente</mat-label>
-            <input formControlName="client" matInput placeholder="label">
+            <input formControlName="client" matInput placeholder="Nome do cliente">
           </mat-form-field>
         </div>
 
@@ -27,7 +27,7 @@
           </mat-form-field>
           <mat-form-field class="w-100" appearance="outline">
             <mat-label>Quantidade</mat-label>
-            <input formControlName="quantity" matInput placeholder="label">
+            <input formControlName="quantity" matInput placeholder="Quantidade">
           </mat-form-field>
           <button [disabled]="productInvoiceform.invalid" (click)="addProduct()" color="primary"
             mat-raised-button>Adicionar item</button>
