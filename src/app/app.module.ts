@@ -10,6 +10,7 @@ import { IssuerComponent } from './issuer/issuer.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { ReactiveFormsModule } from '@angular/forms'
+import { HttpClientModule } from '@angular/common/http'
 
 @NgModule({
   declarations: [AppComponent, IssuerComponent],
@@ -21,6 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms'
     MaterialModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [IssuerService],
   bootstrap: [AppComponent],
