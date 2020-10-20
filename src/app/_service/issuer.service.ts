@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { ProductModel } from '../_models/product'
 
-const url = 'http://localhost:5050/api'
+const url = 'http://localhost:3000'
 
 @Injectable({
   providedIn: 'root',

@@ -1,10 +1,10 @@
+import { tap } from 'rxjs/operators'
 import { IssuerService } from './../_service/issuer.service'
 import { ProductModel } from './../_models/product'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatTable, MatTableDataSource } from '@angular/material/table'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-
 interface InvoiceProductModel {
   product: ProductModel
   quantity: number
@@ -15,30 +15,7 @@ interface InvoiceProductModel {
   styleUrls: ['./issuer.component.css'],
 })
 export class IssuerComponent implements OnInit {
-  products: ProductModel[] = [
-    {
-      id: 1,
-      code: 'IQBWE9RG8',
-      description: 'Sapato ADADAS 50',
-      value: 2500,
-      discount: 0,
-    },
-    {
-      id: 2,
-      code: 'I3BWE9RG9',
-      description: 'Sandálias de Erudito T3',
-      value: 3000,
-      discount: 0,
-    },
-    {
-      id: 3,
-      code: 'AQBWE9RG3',
-      description: 'Robe de mago T5',
-      value: 4000,
-      discount: 0,
-    },
-  ]
-
+  products: ProductModel[]
   @ViewChild(MatTable, { static: true }) table: MatTable<any>
   dataSource: MatTableDataSource<InvoiceProductModel>
   displayedColumns: string[] = ['code', 'description', 'value', 'discount', 'quantity', 'delete']
@@ -61,6 +38,9 @@ export class IssuerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.issuerService.getProducts().subscribe((res) => {
+      this.products = res
+    })
     this.dataSource = new MatTableDataSource(this.invoiceProducts)
   }
 
@@ -78,7 +58,11 @@ export class IssuerComponent implements OnInit {
   calcTotal() {
     this.total = 0
     this.invoiceProducts.map((product) => {
-      const productValue = product.product.value * product.quantity
+      let realValue = product.product.value
+      if (product.product.discount > 0) {
+        realValue = realValue - realValue * (product.product.discount / 100)
+      }
+      const productValue = realValue * product.quantity
       this.total = this.total + productValue
     })
   }
@@ -93,5 +77,14 @@ export class IssuerComponent implements OnInit {
     const date = new Date()
     const invoiceCode = 'invoice' + this.invoiceForm.get('client').value + date.toISOString()
     const invoice = Object.assign({}, this.invoiceForm.value, { products: this.invoiceProducts }, { code: invoiceCode })
+
+    this.issuerService.addInvoice(invoice).subscribe((res) => {
+      window.alert('Nota fiscal adicionada com sucesso!')
+      this.dataSource.data = []
+      this.invoiceProducts = []
+      this.invoiceForm.reset()
+      this.productInvoiceform.reset()
+      this.calcTotal()
+    })
   }
 }
